@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Models;
+
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Attendee extends Model
+{
+    /** @use HasFactory<\Database\Factories\AttendeeFactory> */
+    use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'ticket_cost' => 'integer',
+            'is_paid' => 'boolean',
+            'conference_id' => 'integer',
+        ];
+    }
+
+    public function conference(): BelongsTo
+    {
+        return $this->belongsTo(Conference::class);
+    }
+
+    public static function getForm(): array
+    {
+        return [
+            TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+            TextInput::make('email')
+                ->email()
+                ->required()
+                ->maxLength(255),
+        ];
+    }
+}
